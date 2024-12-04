@@ -1,0 +1,168 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Sign In Page</title>
+
+    <!-- CSS FILES -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .form-container h1 {
+            font-weight: 700;
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-floating input {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: none;
+        }
+
+        .form-floating input::placeholder {
+            color: #ddd;
+        }
+
+        .form-floating label {
+            color: #fff;
+        }
+
+        .form-floating input:focus {
+            border: none;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-custom {
+            background: #6a11cb;
+            color: #fff;
+            border: none;
+            padding: 0.7rem;
+            font-size: 1rem;
+            border-radius: 10px;
+            transition: 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            background: #2575fc;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: #ddd;
+            text-decoration: underline;
+        }
+
+        .footer a:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Sign In</h1>
+        <form id="signInForm" method="post" action="/api/auth/signin">
+            <div class="form-floating mb-4">
+                <input type="email" id="email" name="email" class="form-control" placeholder="Email address" required>
+                <label for="email">Email Address</label>
+            </div>
+            <div class="form-floating mb-4">
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+                <label for="password">Password</label>
+            </div>
+            <button type="submit" class="btn btn-custom w-100">Sign In</button>
+           <p class="text-center mt-3">
+    <a href="/api/users/sign-up.html" style="color: #fff;">Don't have an account? Create One</a>
+</p>
+
+
+        </form>
+        <button class="btn btn-custom w-100 mt-3" onclick="window.location.href='/'">Home Page</button>
+        <p id="error" class="text-danger text-center mt-2"></p>
+        <p id="message" class="text-success text-center mt-2"></p>
+    </div>
+
+<script>
+       document.addEventListener('DOMContentLoaded', function () {
+    const signInForm = document.getElementById('signInForm');
+    const errorMessage = document.getElementById('errorMessage');
+
+    signInForm.addEventListener('submit', function (event) {
+        event.preventDefault(); // Останавливаем отправку формы
+
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+        // Проверяем, чтобы email и пароль не были пустыми
+        if (!email || !password) {
+            errorMessage.textContent = "Email и пароль обязательны!";
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        // Отправляем запрос на авторизацию
+        fetch('/api/auth/signin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Login successful') {
+                    // Сохраняем пароль в localStorage
+                    localStorage.setItem('userPassword', password);
+
+                    // Перенаправляем на страницу аккаунта
+                    window.location.href = `/account?email=${encodeURIComponent(email)}`;
+                } else {
+                    errorMessage.textContent = data.error || "Ошибка авторизации";
+                    errorMessage.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка при авторизации:', error);
+                errorMessage.textContent = "Не удалось выполнить вход. Попробуйте снова.";
+                errorMessage.style.display = 'block';
+            });
+    });
+});
+
+
+    </script>
+
+
+</body>
+</html>

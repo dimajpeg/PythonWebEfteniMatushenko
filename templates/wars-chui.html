@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>chui</title>
+    <!-- CSS FILES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/slick.css"/>
+    <link href="/static/css/tooplate-little-fashion.css" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            padding-top: 40px; /* Отступ для фиксированной шапки */
+        }
+        .site-header {
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            height: 40px;
+            margin: 0; /* Нулевые отступы */
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            height: 100%; /* Высота 100% от родительского элемента (шапки) */
+        }
+        .search-bar input[type="text"] {
+            width: 200px;
+            padding: 4px; /* Отступ для высоты 40px */
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .search-bar button {
+            padding: 4px 5px; /* Отступ для высоты 40px */
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+        .kursach {
+            color: black;
+            cursor: pointer;
+            font-size: 1.5em; /* Размер шрифта */
+            font-weight: bold;
+            height: 100%; /* Высота 100% от родительского элемента (шапки) */
+            display: flex;
+            align-items: center;
+            margin-left: auto; /* Перемещаем KURSACH вправо */
+            margin-right: auto; /* Перемещаем KURSACH влево */
+        }
+        .icon-group {
+            display: flex;
+            align-items: center;
+            height: 100%; /* Высота 100% от родительского элемента (шапки) */
+        }
+        .icon-group a {
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .footer-section {
+            background-color: white; /* Изменение цвета фона на белый */
+            padding: 20px 0;
+            border-top: 1px solid #e7e7e7;
+        }
+        .footer-category {
+            margin-bottom: 20px;
+        }
+        .footer-category h4 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .footer-category ul {
+            list-style: none;
+            padding: 0;
+        }
+        .footer-category ul li {
+            margin-bottom: 10px;
+        }
+        .footer-category ul li a {
+            color: #343a40;
+            text-decoration: none;
+        }
+        .footer-category ul li a:hover {
+            text-decoration: underline;
+        }
+        .sort-dropdown {
+            margin-bottom: 20px;
+        }
+        .banner {
+            width: 100%;
+            margin-bottom: 20px;
+            margin-top: 70px; /* Отступ от верхней части страницы */
+        }
+        .product-thumb {
+            position: relative;
+            overflow: hidden;
+        }
+        .product-thumb img.secondary-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .product-thumb:hover img.secondary-image {
+            opacity: 1;
+        }
+        .product-thumb img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <!-- Header Section -->
+    <header class="site-header">
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <input type="text" placeholder="Search products...">
+            <button><i class="bi bi-search"></i></button>
+        </div>
+        <!-- KURSACH -->
+        <span class="kursach" onclick="location.href='index.html'">FunkyVault</span>
+        <!-- Floating Icons -->
+        <div class="icon-group">
+            <a class="nav-link" href="sign-in.html"><i class="bi bi-person"></i></a>
+            <a class="nav-link" href="product-detail.html"><i class="bi bi-cart"></i></a>
+        </div>
+    </header>
+
+    <!-- Product Detail Section -->
+    <section class="product-detail section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-12">
+                    <img src="../static/images/starwars/chui11.png" class="img-fluid main-product-img" alt="Chewbacka 1">
+                    <div class="additional-product-images mt-3 d-flex">
+                        <div class="additional-product-img-wrapper">
+                            <img src="../static/images/starwars/chui2.png" class="img-fluid additional-product-img-small" alt="Chewbacka2">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12">
+                    <div class="product-info">
+                        <h1>Funko pop</h1>
+                           <h1> Chewbacka  </h1>
+                        <p>Model: 583</p>
+                        <p class="product-price">$19.99</p>
+
+                        <button id="reserve-btn" class="btn btn-primary mt-3" onclick="toggleReserve()">Reserve</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-12">
+                    <h2 class="collapse-btn" data-target="description">Product Description <i class="bi bi-chevron-down"></i></h2>
+                    <div class="collapse-content description collapsed">
+                        <p>Vinyl game figure with a swinging head FUNKO POP</p>
+                    </div>
+                    <h2 class="collapse-btn" data-target="delivery">Delivery Options <i class="bi bi-chevron-down"></i></h2>
+                    <div class="collapse-content delivery collapsed">
+                        <p>The online store FunkyVault.ua works with the latest delivery service in Ukraine – “Nova Poshta”. Delivery within Ukraine by courier service is free. Returns and exchanges of goods are processed within 14 calendar days. The online store KURSACH.ua offers international delivery to the ends of Europe. Cost-free international delivery of 10,000 UAH. For details of delivery and return of goods to your country, please contact the manager at the telephone number: +380734757533</p>
+                    </div>
+                    <h2 class="collapse-btn" data-target="return">Return Policy <i class="bi bi-chevron-down"></i></h2>
+                    <div class="collapse-content return collapsed">
+                        <p>The online store FunkyVault.ua works with the latest delivery service in Ukraine – “Nova Poshta”. Delivery within Ukraine by courier service is free. Returns and exchanges of goods are processed within 14 calendar days. The online store KURSACH.ua offers international delivery to the ends of Europe. Cost-free international delivery of 10,000 UAH. For details of delivery and return of goods to your country, please contact the manager at the telephone number: +380734757533</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Рекомендуемые товары -->
+    <section class="recommended-products">
+        <div class="container">
+            <h2 class="text-center mt-5">RECOMMENDED</h2>
+            <div class="row">
+                 <!-- Третий рекомендованный товар -->
+                <div class="col-lg-4 col-12 mb-3">
+                    <div class="product-thumb">
+                        <a href="wars-bf.html" target="_blank">
+                            <img src="../static/images/starwars/bf11.png" class="img-fluid product-image primary-image" alt="Boba Feet 1">
+                            <img src="../static/images/starwars/bf22.png" class="img-fluid product-image secondary-image" alt="Boba Feet 2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="wars-bf.html" target="_blank" class="product-title-link">Funko Pop Boba Feet</a>
+                                </h5>
+                                <p class="product-p">Star Wars vinyl figur</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$24.99</small>
+                        </div>
+                    </div>
+                </div>
+                <!-- Первый рекомендованный товар -->
+                <div class="col-lg-4 col-12 mb-3">
+                    <div class="product-thumb">
+                        <a href="wars-dart.html" target="_blank">
+                            <img src="../static/images/starwars/dart11.png" class="img-fluid product-image primary-image" alt="Darth Wader 1">
+                            <img src="../static/images/starwars/dart22.png" class="img-fluid product-image secondary-image" alt="Darth Wader  2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="wars-dart.html" target="_blank" class="product-title-link">Funko Pop Darth Wader</a>
+                                </h5>
+                                <p class="product-p">Star Wars vinyl figur </p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$29.99</small>
+                        </div>
+                    </div>
+                </div>
+                <!-- Второй рекомендованный товар -->
+                <div class="col-lg-4 col-12 mb-3">
+                    <div class="product-thumb">
+                        <a href="wars-luk.html" target="_blank">
+                            <img src="../static/images/starwars/luk11.png" class="img-fluid product-image primary-image" alt="Luck 1">
+                            <img src="../static/images/starwars/luk22.png" class="img-fluid product-image secondary-image" alt="Luck 2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="wars-luk.html" target="_blank" class="product-title-link"> Funko Pop Luck</a>
+                                </h5>
+                                <p class="product-p">Star Wars vinyl figur</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$22.99</small>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </section>
+    <style>
+
+        .additional-product-img-wrapper {
+            width: 90px;
+            margin-right: 10px;
+        }
+    </style>
+
+
+    <script>
+        $(document).ready(function(){
+            // Переключение изображений при нажатии на маленькие фотки
+            $('.additional-product-img-small').click(function(){
+                // Получаем ссылку на текущее изображение
+                var clickedSrc = $(this).attr('src');
+                // Получаем ссылку на основное изображение
+                var mainSrc = $('.main-product-img').attr('src');
+                // Меняем ссылки местами
+                $(this).attr('src', mainSrc);
+                $('.main-product-img').attr('src', clickedSrc);
+            });
+        });
+    </script>
+    <!-- Footer Section -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row">
+                <!-- Контакты -->
+                <div class="col-lg-4 footer-category">
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li>Odessa</li>
+                        <li>0734757533</li>
+                        <li>dmat771@gmail.com</li>
+                    </ul>
+                </div>
+                <!-- Информация -->
+                <div class="col-lg-4 footer-category">
+                    <h4>Information</h4>
+                    <ul>
+                        <li><a href="about-us.html">About Us</a></li>
+                        <li><a href="delivery-information.html">Delivery Information</a></li>
+                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="payment-returns.html">Payment & Returns</a></li>
+                    </ul>
+                </div>
+                <!-- Личный кабинет -->
+                <div class="col-lg-4 footer-category">
+                    <h4>Personal Account</h4>
+                    <ul>
+
+                        <li><a href="sign-in.html">My Account</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+</main>
+<!-- JavaScript files -->
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/Headroom.js"></script>
+<script src="/static/js/jQuery.headroom.js"></script>
+<script src="/static/js/slick.min.js"></script>
+<script src="/static/js/custom.js"></script>
+<script>
+    $(document).ready(function(){
+        // Переключение описания продукта при клике на заголовок
+        $('.collapse-btn').click(function(){
+            var target = $(this).data('target');
+            $('.' + target).toggleClass('expanded');
+            $('.' + target).slideToggle();
+            $(this).find('i').toggleClass('bi-chevron-down bi-chevron-up');
+        });
+
+        // Переключение размеров продукта
+        $('.size-btn').click(function(){
+            $('.size-btn').removeClass('active');
+            $(this).addClass('active');
+        });
+
+        // Переключение изображений при клике на маленькие фотки
+        $('.additional-product-img-small').click(function(){
+            var clickedSrc = $(this).attr('src');
+            var mainSrc = $('.main-product-img').attr('src');
+            $(this).attr('src', mainSrc);
+            $('.main-product-img').attr('src', clickedSrc);
+        });
+    });
+</script>
+<!-- jQuery and Bootstrap Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('reserve-btn').addEventListener('click', function () {
+            const product = {
+                name: 'Funko pop\n' +
+                        'Chewbacka',
+                    sku: '513',
+                    price: 24.99,
+                    quantity: 1,
+            };
+
+            // Получение текущих товаров из localStorage
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Проверяем, есть ли уже товар с таким SKU
+            const existingProduct = cartItems.find(item => item.sku === product.sku);
+
+            if (existingProduct) {
+                // Если товар уже есть, увеличиваем количество
+                existingProduct.quantity += 1;
+            } else {
+                // Если товара нет, добавляем его в корзину
+                cartItems.push(product);
+            }
+
+            // Сохранение обновленного списка товаров
+            localStorage.setItem('cart', JSON.stringify(cartItems));
+
+            // Показываем уведомление
+            alert(`Added to cart: ${product.name}`);
+        });
+    });
+</script>
+
+</main>
+</body>
+</html>

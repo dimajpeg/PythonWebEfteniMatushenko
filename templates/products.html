@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Products </title>
+    <!-- CSS FILES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/slick.css"/>
+    <link href="/static/css/tooplate-little-fashion.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding-top: 40px; /* Отступ для фиксированной шапки */
+        }
+        .site-header {
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            height: 40px;
+            margin: 0; /* Нулевые отступы */
+        }
+        .search-bar {
+            display: flex;
+            align-items: center;
+            height: 100%; /* Высота 100% от родительского элемента (шапки) */
+        }
+        .search-bar input[type="text"] {
+            width: 200px;
+            padding: 4px; /* Отступ для высоты 40px */
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .search-bar button {
+            padding: 4px 5px; /* Отступ для высоты 40px */
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+        .FunkyVault {
+            color: black;
+            cursor: pointer;
+            font-size: 1.5em; /* Размер шрифта */
+            font-weight: bold;
+            height: 100%; /* Высота 100% от родительского элемента (шапки) */
+            display: flex;
+            align-items: center;
+            margin-left: auto; /* Перемещаем KURSACH вправо */
+            margin-right: auto; /* Перемещаем KURSACH влево */
+        }
+        .icon-group {
+            display: flex;
+            align-items: center;
+            height: 100%; /* Высота 100% от родительского элемента (шапки) */
+        }
+        .icon-group a {
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .footer-section {
+            background-color: white; /* Изменение цвета фона на белый */
+            padding: 20px 0;
+            border-top: 1px solid #e7e7e7;
+        }
+        .footer-category {
+            margin-bottom: 20px;
+        }
+        .footer-category h4 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .footer-category ul {
+            list-style: none;
+            padding: 0;
+        }
+        .footer-category ul li {
+            margin-bottom: 10px;
+        }
+        .footer-category ul li a {
+            color: #343a40;
+            text-decoration: none;
+        }
+        .footer-category ul li a:hover {
+            text-decoration: underline;
+        }
+        .sort-dropdown {
+            margin-bottom: 20px;
+        }
+        .banner {
+            width: 100%;
+            margin-bottom: 20px;
+            margin-top: 70px; /* Отступ от верхней части страницы */
+        }
+        .product-thumb {
+            position: relative;
+            overflow: hidden;
+        }
+        .product-thumb img.secondary-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .product-container .product-thumb img {
+            width: 100%;
+            height: auto; /* Исправление размера изображений */
+        }
+
+        .product-thumb:hover img.secondary-image {
+            opacity: 1;
+        }
+        .product-thumb img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <!-- Header Section -->
+    <header class="site-header">
+        <!-- Search Bar -->
+        <div class="search-bar">
+    <input id="searchInput" type="text" placeholder="Search products...">
+    <button id="searchButton"><i class="bi bi-search"></i></button>
+</div>
+        <!-- KURSACH -->
+        <span class="FunkyVault" onclick="location.href='index.html'">FunkyVault</span>
+        <!-- Floating Icons -->
+        <div class="icon-group">
+            <a class="nav-link" href="/api/auth/signin"><i class="bi bi-person"></i></a>
+            <a href="{{ url_for('product.show_product_detail') }}" ><i class="bi bi-cart"></i></a>
+        </div>
+    </header>
+
+    <!-- Banner -->
+    <img src="../static/images/ban.png" alt="Banner" class="img-fluid banner">
+
+    <!-- Sort Dropdown -->
+    <div class="container sort-dropdown">
+        <div class="row">
+            <div class="col-12">
+                <select id="sortSelect" class="form-select" aria-label="Sort by">
+                    <option value="default" selected>Sort by</option>
+                    <option value="lowToHigh">Price: Low to High</option>
+                    <option value="highToLow">Price: High to Low</option>
+                    <option value="newest">Newest Arrivals</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sort and Filter Dropdown -->
+    <div class="container sort-filter-dropdown">
+        <div class="row">
+            <!-- Filter Dropdown -->
+            <div class="col-12">
+                <select id="categorySelect" class="form-select" aria-label="Filter by Category">
+                    <option value="all" selected>All Categories</option>
+                    <option value="marvel">Marvel</option>
+                    <option value="dc">DC </option>
+                    <option value="boys">The Boys</option>
+                    <option value="wars">Star Wars</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <!-- Products Section -->
+    <section class="product-detail section-padding">
+        <div class="container">
+            <div class="row" id="products">
+                <!-- Продукт 1: ant-man -->
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="marvel">
+                    <div class="product-thumb-inner">
+                        <a href="{{ url_for('boys_and_marvel.boys-houm_html') }}" target="_blank">
+                            <img src="/static/images/marvel/ant1.png?v=2" class="img-fluid product-image primary-image" alt="Ant-Man 1">
+                            <img src="/static/images/marvel/ant2.png?v=2" class="img-fluid product-image secondary-image" alt="Ant-Man 2">
+
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="{{ url_for('boys_and_marvel.marvel-ant-man_html') }}" target="_blank" class="product-title-link">Funko Pop ant-man </a>
+                                </h5>
+                                <p class="product-p">Vinyl figur.</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$19.99</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Продукт 2: houm -->
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="boys">
+                    <div class="product-thumb-inner">
+                        <a href="" target="_blank">
+                            <img src="/static/images/theboys/houm1.png" class="img-fluid product-image primary-image" alt="Houmlender 1">
+                            <img src="/static/images/theboys/houm1.png" class="img-fluid product-image secondary-image" alt="Houmlender 2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="{{ url_for('boys_and_marvel.boys-houm_html') }}" target="_blank" class="product-title-link">Funko Pop Houmlender</a>
+                                </h5>
+                                <p class="product-p"> Vinyl figur</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$22.99</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Продукт 3: batman -->
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="dc">
+                    <div class="product-thumb-inner">
+                        <a href="{{ url_for('boys_and_marvel.dc-batman_html') }}" target="_blank">
+                            <img src="/static/images/dc/bat11.png" class="img-fluid product-image primary-image" alt="Batman 1">
+                            <img src="/static/images/dc/bat2.png" class="img-fluid product-image secondary-image" alt="Batman 2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="{{ url_for('boys_and_marvel.dc-batman_html') }}" target="_blank" class="product-title-link">Funko Pop Batman </a>
+                                </h5>
+                                <p class="product-p">Vinyl figur</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$19.99</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Продукт 4: luk -->
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="wars">
+                    <div class="product-thumb-inner">
+                        <a href="{{ url_for('boys_and_marvel.wars-luk_html') }}" target="_blank">
+                            <img src="/static/images/starwars/luk11.png" class="img-fluid product-image primary-image" alt="luk 1">
+                            <img src="/static/images/starwars/luk22.png" class="img-fluid product-image secondary-image" alt="luk 2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="{{ url_for('boys_and_marvel.wars-luk_html') }}" target="_blank" class="product-title-link">Funko Pop Luc</a>
+                                </h5>
+                                <p class="product-p">Vinyl figur</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$39.99</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Продукт 5: joker -->
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="dc">
+                    <div class="product-thumb-inner">
+                        <a href="{{ url_for('boys_and_marvel.dc-joker_html') }}" target="_blank">
+                            <img src="/static/images/dc/joker1.png" class="img-fluid product-image primary-image" alt="Joker 1">
+                            <img src="/static/images/dc/joker2.png" class="img-fluid product-image secondary-image" alt="Joker 2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="{{ url_for('boys_and_marvel.dc-joker_html') }}" target="_blank" class="product-title-link">Funko Pop joker</a>
+                                </h5>
+                                <p class="product-p">Vinyl figur</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$39.99</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Продукт 6: Spider woman -->
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="marvel">
+                    <div class="product-thumb-inner">
+                        <a href="{{ url_for('boys_and_marvel.marvel-women-spidy_html') }}" target="_blank">
+                            <img src="/static/images/marvel/wsp11.png" class="img-fluid product-image primary-image" alt="Spider woman 1">
+                            <img src="/static/images/marvel/wsp2.png" class="img-fluid product-image secondary-image" alt="Spider woman 2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="{{ url_for('boys_and_marvel.marvel-women-spidy_html') }}" target="_blank" class="product-title-link">Funko Pop Spider woman </a>
+                                </h5>
+                                <p class="product-p">Vinyl figur</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$39.99</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Продукт 7: wolwerin -->
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="marvel">
+                    <div class="product-thumb-inner">
+                        <a href="{{ url_for('boys_and_marvel.marvel-wolverine_html') }}" target="_blank">
+                            <img src="/static/images/marvel/wol11.png" class="img-fluid product-image primary-image" alt="Wolwerin 1">
+                            <img src="/static/images/marvel/wol22.png" class="img-fluid product-image secondary-image" alt="Wolwerin 2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="{{ url_for('boys_and_marvel.marvel-wolverine_html') }}" target="_blank" class="product-title-link">Funko Pop Wolwerin </a>
+                                </h5>
+                                <p class="product-p">Vinyl figur</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$24.99</small>
+                        </div>
+                    </div>
+                </div>
+                <!-- Продукт 8: butcher -->
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="boys">
+                    <div class="product-thumb-inner">
+                        <a href="{{ url_for('boys_and_marvel.boys-but_html') }}" target="_blank">
+                            <img src="/static/images/theboys/but11.png" class="img-fluid product-image primary-image" alt="Butcher 1">
+                            <img src="/static/images/theboys/but2.png" class="img-fluid product-image secondary-image" alt="Butcher 2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="{{ url_for('boys_and_marvel.boys-but_html') }}" target="_blank" class="product-title-link">Funko Pop Butcher</a>
+                                </h5>
+                                <p class="product-p">Vinyl figur</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$24.99</small>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Продукт 9: Chewbaka -->
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="wars">
+                    <div class="product-thumb-inner">
+                        <a href="{{ url_for('boys_and_marvel.wars-chui_html') }}" target="_blank">
+                            <img src="/static/images/starwars/chui11.png" class="img-fluid product-image primary-image" alt="Chewbaka 1">
+                            <img src="/static/images/starwars/chui2.png" class="img-fluid product-image secondary-image" alt="Chewbaka 2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="{{ url_for('boys_and_marvel.wars-chui_html') }}" target="_blank" class="product-title-link">Funko Pop Chewbaka </a>
+                                </h5>
+                                <p class="product-p">Vinyl figur</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$24.99</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Продукт 10: Harli -->
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="dc">
+                    <div class="product-thum-inner">
+                        <a href="{{ url_for('boys_and_marvel.dc-hq_html') }}" target="_blank">
+                            <img src="/static/images/dc/hq1.png" class="img-fluid product-image primary-image" alt="Harli 1">
+                            <img src="/static/images/dc/hq2.png" class="img-fluid product-image secondary-image" alt="Harli 2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="{{ url_for('boys_and_marvel.dc-hq_html') }}" target="_blank" class="product-title-link">Funko Pop Harli</a>
+                                </h5>
+                                <p class="product-p">Vinyl figur.</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$14.99</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Продукт 11: Woulwerin X -->
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="marvel">
+                    <div class="product-thumb-inner">
+                        <a href="" target="_blank">
+                            <img src="/static/images/marvel/kwol11.png" class="img-fluid product-image primary-image" alt="Woulwerin X 1">
+                            <img src="/static/images/marvel/kwol22.png" class="img-fluid product-image secondary-image" alt="Woulwerin X 2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="{{ url_for('boys_and_marvel.marvel-kwon_html') }}" target="_blank" class="product-title-link">Funko Pop Woulwerin X</a>
+                                </h5>
+                                <p class="product-p">Vinyl figur</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$29.99</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Продукт 12: dart wader -->
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="wars">
+                    <div class="product-thumb-inner">
+                        <a href="{{ url_for('boys_and_marvel.wars-dart_html') }}" target="_blank">
+                            <img src="/static/images/starwars/dart11.png" class="img-fluid product-image primary-image" alt="Dart wader 1">
+                            <img src="/static/images/starwars/dart21.jpg" class="img-fluid product-image secondary-image" alt="Dart wader 2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="{{ url_for('boys_and_marvel.wars-dart_html') }}" target="_blank" class="product-title-link">Funko Pop Dart Wader</a>
+                                </h5>
+                                <p class="product-p">Vinyl figur</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$29.99</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Продукт 13: StarLight -->
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="boys">
+                    <div class="product-thumb-inner">
+                        <a href="{{ url_for('boys_and_marvel.boys-star_html') }}" target="_blank">
+                            <img src="/static/images/theboys/star11.png" class="img-fluid product-image primary-image" alt="StarLight 1">
+                            <img src="/static/images/theboys/star22.png" class="img-fluid product-image secondary-image" alt="StarLight 2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="{{ url_for('boys_and_marvel.boys-star_html') }}" target="_blank" class="product-title-link">Funko Pop StarLight</a>
+                                </h5>
+                                <p class="product-p">Vinyl figur</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$29.99</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Продукт 14: Batman Clasic -->
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="dc">
+                    <div class="product-thumb-inner">
+                        <a href="{{ url_for('boys_and_marvel.classic-dc-batsoski_html') }}" target="_blank">
+                            <img src="/static/images/dc/batsoski11.png" class="img-fluid product-image primary-image" alt="Batman Clasic 1">
+                            <img src="/static/images/dc/batsoski22.png" class="img-fluid product-image secondary-image" alt="Batman Clasic 2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="{{ url_for('boys_and_marvel.classic-dc-batsoski_html') }}" target="_blank" class="product-title-link">Funko Pop Batman Clasic</a>
+                                </h5>
+                                <p class="product-p">Vinyl figur</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$29.99</small>
+                        </div>
+                    </div>
+
+                </div><!-- Продукт 15: Boba Fett -->
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="wars">
+                    <div class="product-thumb-inner">
+                        <a href="{{ url_for('boys_and_marvel.wars-bf_html') }}" target="_blank">
+                            <img src="/static/images/starwars/bf11.png" class="img-fluid product-image primary-image" alt="Boba Fett 1">
+                            <img src="/static/images/starwars/bf22.png" class="img-fluid product-image secondary-image" alt="Boba Fett 2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="{{ url_for('boys_and_marvel.wars-bf_html') }}" target="_blank" class="product-title-link">Funko Pop Boba Fett</a>
+                                </h5>
+                                <p class="product-p">Vinyl figur</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$29.99</small>
+                        </div>
+                    </div>
+
+                </div><!-- Продукт 16: Solder Boy -->
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="boys">
+                    <div class="product-thumb-inner">
+                        <a href="{{ url_for('boys_and_marvel.boys-sol_html') }}" target="_blank">
+                            <img src="/static/images/theboys/sol11.png" class="img-fluid product-image primary-image" alt="Solder Boy 1">
+                            <img src="/static/images/theboys/sol11.png" class="img-fluid product-image secondary-image" alt="Solder Boy 2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="{{ url_for('boys_and_marvel.boys-sol_html') }}" target="_blank" class="product-title-link">Funko Pop Solder Boy</a>
+                                </h5>
+                                <p class="product-p">Vinyl figur</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$29.99</small>
+                        </div>
+                    </div>
+
+                </div><!-- Продукт 17: Batman Future -->
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="dc">
+                    <div class="product-thumb-inner">
+                        <a href="{{ url_for('boys_and_marvel.future-dc-batmult_html') }}" target="_blank">
+                            <img src="/static/images/dc/batmult1.png" class="img-fluid product-image primary-image" alt="Batman Future  1">
+                            <img src="/static/images/dc/batmult2.png" class="img-fluid product-image secondary-image" alt="Batman Future  2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="{{ url_for('boys_and_marvel.future-dc-batmult_html') }}" target="_blank" class="product-title-link">Funko Pop Batman Future </a>
+                                </h5>
+                                <p class="product-p">Vinyl figur</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$29.99</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Продукт 18: Anikin  -->
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="wars">
+                    <div class="product-thumb-inner">
+                        <a  href="{{ url_for('boys_and_marvel.wars-an_html') }}" target="_blank">
+                            <img src="/static/images/starwars/an11.png" class="img-fluid product-image primary-image" alt="Anikin 1">
+                            <img src="/static/images/starwars/an2.png" class="img-fluid product-image secondary-image" alt="Anikin 2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a  href="{{ url_for('boys_and_marvel.wars-an_html') }}" target="_blank" class="product-title-link">Funko Pop Anikin</a>
+                                </h5>
+                                <p class="product-p">Vinyl figur</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$29.99</small>
+                        </div>
+                    </div>
+
+                </div><!-- Продукт 19: Spider-man Gameverse -->
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="marvel">
+                    <div class="product-thumb-inner">
+                        <a href="{{ url_for('boys_and_marvel.marvel-spider-man_html') }}" target="_blank">
+                            <img src="/static/images/marvel/spider.man.game11.png" class="img-fluid product-image primary-image" alt="Spider-man Gameverse 1">
+                            <img src="/static/images/marvel/spider.man.game2.png" class="img-fluid product-image secondary-image" alt="Spider-man Gameverse 2">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="{{ url_for('boys_and_marvel.marvel-spider-man_html') }}" target="_blank" class="product-title-link">Funko Pop Spider-man Gameverse</a>
+                                </h5>
+                                <p class="product-p">Vinyl figur</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$29.99</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <!-- Footer Section -->
+ <!-- Footer Section -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row">
+                <!-- Контакты -->
+                <div class="col-lg-4 footer-category">
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li>Odessa</li>
+                        <li>0734757533</li>
+                        <li>dmat771@gmail.com</li>
+                    </ul>
+                </div>
+                <!-- Информация -->
+                <div class="col-lg-4 footer-category">
+                    <h4>Information</h4>
+                    <ul>
+                        <li><a href="about-us.html">About Us</a></li>
+                        <li><a href="delivery-information.html">Delivery Information</a></li>
+                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="payment-returns.html">Payment & Returns</a></li>
+                    </ul>
+                </div>
+                <!-- Личный кабинет -->
+                <div class="col-lg-4 footer-category">
+                    <h4>Personal Account</h4>
+                    <ul>
+                        <li><a href="/api/auth/signin">My Account</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const searchButton = document.querySelector(".search-bar button");
+        const searchInput = document.querySelector(".search-bar input[type='text']");
+
+        searchButton.addEventListener("click", function() {
+            const query = searchInput.value;
+
+            if (query) {
+                fetch(`/api/products/search?name=${encodeURIComponent(query)}`)
+                    .then(response => response.text())
+                    .then(siteName => {
+                        if (siteName !== "Product not found") {
+                            window.location.href = siteName;
+                        } else {
+                            alert("Product not found");
+                        }
+                    })
+                    .catch(error => console.error("Error:", error));
+            } else {
+                alert("Please enter a product name to search");
+            }
+        });
+    });
+</script>
+
+<!-- SCRIPTS -->
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/slick.min.js"></script>
+<script src="/static/js/custom.js"></script>
+<script>
+    // Sample product data for demonstration
+    const products = [
+    {
+        title: "Funko Pop Ant-man", //1
+        price: 19.99,
+        dateAdded: new Date('2023-01-10'),
+        category: 'marvel',
+        primaryImage: "/static/images/marvel/ant22.jpeg",
+        secondaryImage: "/static/images/marvel/ant11.jpeg",
+        url: "{{ url_for('boys_and_marvel.marvel-ant-man_html') }}"
+    },
+    {
+        title: "Funko Pop Houmlender", //2
+        price: 22.99,
+        dateAdded: new Date('2023-05-30'),
+        category: 'boys',
+        primaryImage: "/static/images/theboys/houm11.jpg",
+        secondaryImage: "/static/images/theboys/houm2.png",
+        url: "{{ url_for('boys_and_marvel.boys-houm_html') }}"
+    },
+    {
+        title: "Funko Pop Batman", //3
+        price: 19.99,
+        dateAdded: new Date('2023-06-01'),
+        category: 'dc',
+        primaryImage: "/static/images/dc/bat11.png",
+        secondaryImage: "/static/images/dc/bat2.png",
+        url: "{{ url_for('boys_and_marvel.dc-batman_html') }}"
+    },
+    {
+        title: "Funko Pop Luk Skaywaker", //4
+        price: 39.99,
+        dateAdded: new Date('2023-06-05'),
+        category: 'wars',
+        primaryImage: "/static/images/starwars/luk11.png",
+        secondaryImage: "/static/images/starwars/luk22.png",
+        url: "{{ url_for('boys_and_marvel.wars-luk_html') }}"
+    },
+    {
+        title: "Funko Pop Joker", //5
+        price: 39.99,
+        dateAdded: new Date('2023-06-10'),
+        category: 'dc',
+        primaryImage: "/static/images/dc/joker2.png",
+        secondaryImage: "/static/images/dc/joker1.png",
+        url: "{{ url_for('boys_and_marvel.dc-joker_html') }}"
+    },
+    {
+        title: "Funko Pop Spider-Women", //6
+        price: 39.99,
+        dateAdded: new Date('2023-06-15'),
+        category: 'marvel',
+        primaryImage: "/static/images/marvel/wsp11.png",
+        secondaryImage: "/static/images/marvel/wsp2.png",
+        url: "{{ url_for('boys_and_marvel.marvel-women-spidy_html') }}"
+    },
+    {
+        title: "Funko Pop Wolverine", //7
+        price: 24.99,
+        dateAdded: new Date('2023-07-01'),
+        category: 'marvel',
+        primaryImage: "/static/images/marvel/wol11.png",
+        secondaryImage: "/static/images/marvel/wol22.png",
+        url: "{{ url_for('boys_and_marvel.marvel-wolverine_html') }}"
+    },
+    {
+        title: "Funko Pop Butcher", //8
+        price: 24.99,
+        dateAdded: new Date('2023-07-05'),
+        category: 'boys',
+        primaryImage: "/static/images/theboys/but11.png",
+        secondaryImage: "/static/images/theboys/but2.png",
+        url: "{{ url_for('boys_and_marvel.boys-but_html') }}"
+    },
+    {
+        title: "Funko Pop Shubaka", //9
+        price: 24.99,
+        dateAdded: new Date('2023-07-10'),
+        category: 'wars',
+        primaryImage: "/static/images/starwars/chui11.png",
+        secondaryImage: "/static/images/starwars/chui2.png",
+        url: "{{ url_for('boys_and_marvel.wars-chui_html') }}"
+    },
+    {
+        title: "Funko Pop Harli Qween", //10
+        price: 14.99,
+        dateAdded: new Date('2023-07-15'),
+        category: 'dc',
+        primaryImage: "/static/images/dc/hq1.png",
+        secondaryImage: "/static/images/dc/hq2.png",
+        url: "{{ url_for('boys_and_marvel.dc-hq_html') }}"
+    },
+    {
+        title: "Funko Pop Wolverine-comics", //11
+        price: 19.99,
+        dateAdded: new Date('2023-08-01'),
+        category: 'marvel',
+        primaryImage: "/static/images/marvel/kwol11.png",
+        secondaryImage: "/static/images/marvel/kwol22.png",
+        url: "{{ url_for('boys_and_marvel.marvel-kwon_html') }}"
+    },
+    {
+        title: "Funko Pop Dart-Waider", //12
+        price: 29.99,
+        dateAdded: new Date('2023-08-05'),
+        category: 'wars',
+        primaryImage: "/static/images/starwars/dart11.png",
+        secondaryImage: "/static/images/starwars/dart22.png",
+        url: "{{ url_for('boys_and_marvel.wars-dart_html') }}"
+    },
+    {
+        title: "Funko Pop Starlight", //13
+        price: 39.99,
+        dateAdded: new Date('2023-08-10'),
+        category: 'boys',
+        primaryImage: "/static/images/theboys/star11.png",
+        secondaryImage: "/static/images/theboys/star22.png",
+        url: "{{ url_for('boys_and_marvel.boys-star_html') }}"
+    },
+    {
+        title: "Funko Pop Batman classic", //14
+        price: 29.99,
+        dateAdded: new Date('2023-08-10'),
+        category: 'dc',
+        primaryImage: "/static/images/dc/batsoski22.png",
+        secondaryImage: "/static/images/dc/batsoski11.png",
+        url: "{{ url_for('boys_and_marvel.classic-dc-batsoski_html') }}"
+    },
+    {
+        title: "Funko Pop Boba-Fet", //15
+        price: 19.99,
+        dateAdded: new Date('2023-08-10'),
+        category: 'wars',
+        primaryImage: "/static/images/starwars/bf11.png",
+        secondaryImage: "/static/images/starwars/bf22.png",
+        url: "{{ url_for('boys_and_marvel.wars-bf_html') }}"
+    },
+    {
+        title: "Funko Pop Solder-boy", //16
+        price: 29.99,
+        dateAdded: new Date('2023-08-10'),
+        category: 'boys',
+        primaryImage: "/static/images/theboys/sol11.png",
+        secondaryImage: "/static/images/theboys/sol22.png",
+        url: "{{ url_for('boys_and_marvel.boys-sol_html') }}"
+    },
+    {
+        title: "Funko Pop Batman future", //17
+        price: 24.99,
+        dateAdded: new Date('2023-08-10'),
+        category: 'dc',
+        primaryImage: "/static/images/dc/batmult1.png",
+        secondaryImage: "/static/images/dc/batmult2.png",
+        url: "{{ url_for('boys_and_marvel.future-dc-batmult_html') }}"
+    },
+    {
+        title: "Funko Pop Anyken Skywaker", //18
+        price: 34.99,
+        dateAdded: new Date('2023-08-10'),
+        category: 'wars',
+        primaryImage: "/static/images/starwars/an11.png",
+        secondaryImage: "/static/images/starwars/an2.png",
+        url: "{{ url_for('boys_and_marvel.wars-an_html') }}"
+    },
+    {
+        title: "Funko Pop Spider Man Gameverse", //19
+        price: 33.99,
+        dateAdded: new Date('2023-08-10'),
+        category: 'marvel',
+        primaryImage: "/static/images/marvel/spider.man.game11.png",
+        secondaryImage: "/static/images/marvel/spider.man.game2.png",
+        url: "{{ url_for('boys_and_marvel.marvel-spider-man_html') }}"
+    }
+];
+
+
+    // Function to render products based on the sorted/filtered data
+    function renderProducts(filteredProducts) {
+        const productsContainer = document.getElementById('products');
+        productsContainer.innerHTML = '';
+
+        filteredProducts.forEach(product => {
+            const productHtml = `
+                <div class="col-lg-4 col-12 mb-3 product-thumb" data-category="${product.category}">
+                    <div class="product-thumb-inner">
+                        <a href="${product.url}" target="_blank">
+                            <img src="${product.primaryImage}" class="img-fluid product-image primary-image" alt="${product.title}">
+                            <img src="${product.secondaryImage}" class="img-fluid product-image secondary-image" alt="${product.title}">
+                        </a>
+                        <div class="product-info d-flex">
+                            <div>
+                                <h5 class="product-title mb-0">
+                                    <a href="${product.url}" target="_blank" class="product-title-link">${product.title}</a>
+                                </h5>
+                                <p class="product-p">Vynil figure.</p>
+                            </div>
+                            <small class="product-price text-muted ms-auto">$${product.price.toFixed(2)}</small>
+                        </div>
+                    </div>
+                </div>
+            `;
+            productsContainer.insertAdjacentHTML('beforeend', productHtml);
+        });
+    }
+
+    // Initial render of all products
+    renderProducts(products);
+
+    // Event listener for sorting
+    document.getElementById('sortSelect').addEventListener('change', function() {
+        const selectedSort = this.value;
+
+        let sortedProducts = [...products];
+        if (selectedSort === 'lowToHigh') {
+            sortedProducts.sort((a, b) => a.price - b.price);
+        } else if (selectedSort === 'highToLow') {
+            sortedProducts.sort((a, b) => b.price - a.price);
+        } else if (selectedSort === 'newest') {
+            sortedProducts.sort((a, b) => b.dateAdded - a.dateAdded);
+        }
+
+        renderProducts(sortedProducts);
+    });
+
+    // Event listener for filtering
+    document.getElementById('categorySelect').addEventListener('change', function() {
+        const selectedCategory = this.value;
+
+        const filteredProducts = selectedCategory === 'all' ? products : products.filter(product => product.category === selectedCategory);
+        renderProducts(filteredProducts);
+    });
+
+</script>
+
+
+<script>
+document.getElementById('searchButton').addEventListener('click', function () {
+    const query = document.getElementById('searchInput').value.trim();
+
+    if (!query) {
+        alert('Please enter a search term.');
+        return;
+    }
+
+    // Отправляем запрос на сервер (используем POST)
+    fetch('/products/products.html', {
+        method: 'POST',  // Используем POST для поиска
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query }),  // Передаем строку поиска
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+        } else if (data.link) {
+            // Убираем '/products' из ссылки, если он есть
+            let link = data.link;
+            if (link.startsWith('/products')) {
+                link = link.replace('/products', '');  // Убираем '/products' только с начала строки
+            }
+
+            // Переход на правильную ссылку
+            window.location.href = link;
+        } else {
+            alert('No results found.');
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка при выполнении поиска:', error);
+        alert('An error occurred while searching. Please try again.');
+    });
+});
+
+</script>
+
+
+</main>
+</body>
+</html>

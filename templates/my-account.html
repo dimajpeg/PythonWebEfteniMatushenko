@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="User Account Information">
+  <meta name="author" content="">
+  <title>My Account </title>
+  <!-- CSS FILES -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/slick.css"/>
+    <link href="/static/css/tooplate-little-fashion.css" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      padding-top: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-height: 100vh;
+      background-color: #f8f9fa;
+      padding-bottom: 100px; /* Добавляем отступ снизу для футера */
+    }
+
+    .account-section {
+      max-width: 600px;
+      width: 100%;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .account-section h2 {
+      margin-bottom: 20px;
+    }
+
+    .account-details {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .account-details p {
+      margin: 10px 0;
+    }
+
+    .order-history {
+      margin-top: 20px;
+      text-align: left;
+      max-height: 300px; /* Ограничиваем высоту для прокрутки */
+      overflow-y: auto;
+      border: 1px solid #ddd; /* Добавляем границу для выделения области прокрутки */
+      padding: 10px;
+    }
+
+    .order-history h3 {
+      margin-bottom: 10px;
+    }
+
+    .order-history ul {
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .order-history li {
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-direction: column; /* Изменяем направление flex для вертикального выравнивания */
+      text-align: left; /* Выравниваем текст по левому краю */
+    }
+
+    .btn-delete-order {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px; /* Добавляем отступ сверху для кнопки удаления */
+    }
+
+    .btn-home {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      margin-top: 20px;
+    }
+
+    .btn-home:hover {
+      background-color: #0056b3;
+    }
+
+    .footer-section {
+      background-color: white;
+      padding: 20px 0;
+      border-top: 1px solid #e7e7e7;
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      z-index: 1000; /* Устанавливаем z-index, чтобы футер был поверх остального контента */
+    }
+
+    .footer-section {
+      padding: 0px 0; /* Увеличиваем высоту футера до 40px сверху и снизу */
+    }
+
+    .footer-section {
+      padding-bottom: 0px; /* Уменьшаем внутренний отступ снизу до 10px */
+    }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+
+    .footer-category {
+      margin-bottom: 20px;
+    }
+
+    .footer-category h4 {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .footer-category ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-category ul li {
+      margin-bottom: 10px;
+    }
+
+    .footer-category ul li a {
+      color: #343a40;
+      text-decoration: none;
+    }
+
+    .footer-section {
+      height: 170px; /* Задаем фиксированную высоту футера в 50px */
+    }
+
+    .footer-category ul li a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<section class="account-section">
+  <h2>Information about Account</h2>
+  <div class="account-details">
+    <p>Email: <span id="accountEmail">example@example.com</span></p>
+    <p>Password: <span id="accountPassword">********</span></p>
+  </div>
+  <div class="order-history">
+    <h3>Order History</h3>
+    <ul id="orderHistory">
+      <!-- Orders will be dynamically added here -->
+    </ul>
+  </div>
+  <a href="/" class="btn-home">Go Home</a>
+</section>
+<!-- Footer Section -->
+
+
+   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const email = "{{ email }}"; // Извлекаем email, переданный из сервера
+    const password = localStorage.getItem('userPassword'); // Получаем пароль из localStorage
+
+    if (!password) {
+        // Если пароль отсутствует, перенаправляем на страницу входа
+        alert("Пароль не найден. Авторизуйтесь снова.");
+        window.location.href = "/api/auth/signin";
+        return;
+    }
+
+    // Отправляем запрос на сервер для получения данных аккаунта
+    fetch('/my-account', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            // Отображаем данные пользователя
+            document.getElementById('accountEmail').textContent = data.email || 'N/A';
+            document.getElementById('accountPassword').textContent = password; // Используем сохраненный пароль
+
+            // Отображаем историю заказов
+            const orderHistory = document.getElementById('orderHistory');
+            orderHistory.innerHTML = ''; // Очищаем перед добавлением
+
+            if (data.orders && data.orders.length > 0) {
+                data.orders.forEach(order => {
+                    const li = document.createElement('li');
+                    li.textContent = `Order #${order.orderId}: ${order.products} - $${order.totalCost} (Quantity: ${order.quantity})`;
+                    orderHistory.appendChild(li);
+                });
+            } else {
+                orderHistory.innerHTML = '<p>No orders found.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка при загрузке данных аккаунта:', error);
+            alert("Не удалось загрузить данные аккаунта. Попробуйте снова.");
+        });
+
+    // Обработчик для кнопки выхода
+    document.getElementById('logoutButton').addEventListener('click', function () {
+        localStorage.removeItem('userPassword'); // Удаляем пароль
+        window.location.href = "/api/auth/signin"; // Перенаправляем на страницу входа
+    });
+});
+
+</script>
+
+</body>
+</html>
+
+
+</body>
+</html>

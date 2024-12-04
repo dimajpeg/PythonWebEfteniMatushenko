@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>delivery</title>
+  <!-- CSS FILES -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/slick.css"/>
+    <link href="/static/css/tooplate-little-fashion.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding-top: 40px; /* Отступ для фиксированной шапки */
+    }
+    .site-header {
+      background: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      height: 40px;
+      margin: 0; /* Нулевые отступы */
+    }
+
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      height: 100%; /* Высота 100% от родительского элемента (шапки) */
+    }
+    .search-bar input[type="text"] {
+      width: 200px;
+      padding: 4px; /* Отступ для высоты 40px */
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .search-bar button {
+      padding: 4px 5px; /* Отступ для высоты 40px */
+      border: none;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 5px;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+    .kursach {
+      color: black;
+      cursor: pointer;
+      font-size: 1.5em; /* Размер шрифта */
+      font-weight: bold;
+      height: 100%; /* Высота 100% от родительского элемента (шапки) */
+      display: flex;
+      align-items: center;
+      margin: 0 auto; /* Перемещаем KURSACH в центр */
+    }
+    .icon-group {
+      display: flex;
+      align-items: center;
+      height: 100%; /* Высота 100% от родительского элемента (шапки) */
+    }
+    .icon-group a {
+      margin-left: 10px;
+      display: flex;
+      align-items: center;
+    }
+    .footer-section {
+      background-color: white; /* Изменение цвета фона на белый */
+      padding: 20px 0;
+      border-top: 1px solid #e7e7e7;
+    }
+    .footer-category {
+      margin-bottom: 20px;
+    }
+    .footer-category h4 {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+    .footer-category ul {
+      list-style: none;
+      padding: 0;
+    }
+    .footer-category ul li {
+      margin-bottom: 10px;
+    }
+    .footer-category ul li a {
+      color: #343a40;
+      text-decoration: none;
+    }
+    .footer-category ul li a:hover {
+      text-decoration: underline;
+    }
+    .sort-dropdown {
+      margin-bottom: 20px;
+    }
+    .banner {
+      width: 100%;
+      margin-bottom: 20px;
+      margin-top: 70px; /* Отступ от верхней части страницы */
+    }
+    .product-thumb {
+      position: relative;
+      overflow: hidden;
+    }
+    .product-thumb img.secondary-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+    .product-thumb:hover img.secondary-image {
+      opacity: 1;
+    }
+    .product-thumb img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <!-- Header Section -->
+  <header class="site-header">
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <input type="text" placeholder="Search products...">
+      <button><i class="bi bi-search"></i></button>
+    </div>
+    <!-- KURSACH -->
+    <span class="kursach" onclick="location.href='index.html'">FunkyVault</span>
+    <!-- Floating Icons -->
+    <div class="icon-group">
+      <a class="nav-link" href="sign-in.html"><i class="bi bi-person"></i></a>
+      <a class="nav-link" href="#"><i class="bi bi-cart"></i></a>
+    </div>
+  </header>
+  <!-- Banner -->
+  <img src="../static/images/ban.png" alt="Banner" class="img-fluid banner">
+  <!-- Main Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <p style="text-align: center; font-weight: bold; font-size: 24px; margin-top: 30px;" <p>Delivery throughout Ukraine </p>
+        <p style="text-align: center; font-size: 18px;" <p>The online store FunkyVault cooperates with the largest delivery service in Ukraine – “Nova Poshta”. </p>
+        <p>The main advantage of shopping at FunkyVault is that every client can make a cost-free sample of the worded speech before paying. </p>
+        <p>You do not pay for delivery, exchange or return services - all transport costs are covered by the online store!</p>
+      </div>
+      </div>
+  </div>
+  <!-- Footer Section -->
+  <footer class="footer-section">
+    <div class="container">
+      <div class="row">
+        <!-- Контакты -->
+        <div class="col-lg-4 footer-category">
+          <h4>Contact Us</h4>
+          <ul>
+            <li>Odessa</li>
+            <li>0734757533</li>
+            <li>dmat771@gmail.com</li>
+          </ul>
+        </div>
+        <!-- Информация -->
+        <div class="col-lg-4 footer-category">
+          <h4>Information</h4>
+          <ul>
+            <li><a href="about-us.html">About Us</a></li>
+            <li><a href="delivery-information.html">Delivery Information</a></li>
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="payment-returns.html">Payment & Returns</a></li>
+          </ul>
+        </div>
+        <!-- Личный кабинет -->
+        <div class="col-lg-4 footer-category">
+          <h4>Personal Account</h4>
+          <ul>
+            <li><a href="sign-in.html">My Account</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</main>
+<!-- JavaScript files -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/Headroom.js"></script>
+<script src="js/jQuery.headroom.js"></script>
+<script src="js/slick.min.js"></script>
+<script src="js/custom.js"></script>
+<script>
+  $(document).ready(function(){
+    // Переключение описания продукта при клике на заголовок
+    $('.collapse-btn').click(function(){
+      var target = $(this).data('target');
+      $('.' + target).toggleClass('expanded');
+      $('.' + target).slideToggle();
+      $(this).find('i').toggleClass('bi-chevron-down bi-chevron-up');
+    });
+
+
+    // Переключение размеров продукта
+    $('.size-btn').click(function(){
+      $('.size-btn').removeClass('active');
+      $(this).addClass('active');
+    });
+
+    // Переключение изображений при клике на маленькие фотки
+    $('.additional-product-img-small').click(function(){
+      var clickedSrc = $(this).attr('src');
+      var mainSrc = $('.main-product-img').attr('src');
+      $(this).attr('src', mainSrc);
+      $('.main-product-img').attr('src', clickedSrc);
+    });
+  });
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
